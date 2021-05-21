@@ -471,8 +471,8 @@ def Neural_net(X, Y, num_t_v, archi, epoch):
     train_dataset = TensorDataset(X_train_scaled, Y_train)   
     valid_dataset = TensorDataset(X_val_scaled, Y_val)
     
-    trainloader = DataLoader(train_dataset, batch_size=4096, shuffle=True, drop_last=True)
-    validloader = DataLoader(valid_dataset, batch_size=4096, shuffle=True, drop_last=True)
+    trainloader = DataLoader(train_dataset, batch_size=2048, shuffle=True, drop_last=True)
+    validloader = DataLoader(valid_dataset, batch_size=2048, shuffle=True, drop_last=True)
     
     # define Network 
     class NN_fwd_model(nn.Module):
@@ -549,8 +549,13 @@ def Neural_net(X, Y, num_t_v, archi, epoch):
             trained_y = model(batch_X.float())            
             
             # calculate loss
+
+            regularization_loss = 0
+            for param in model.parameters():
+                regularization_loss += torch.sum(abs(param))
+
             loss = loss_ftn(trained_y, batch_Y.float())        
-            
+            loss = loss + lamda * regularization_loss 
             # credit assignment
             loss.backward()
             
