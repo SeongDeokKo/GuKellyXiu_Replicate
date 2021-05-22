@@ -555,7 +555,7 @@ def Neural_net(X, Y, num_t_v, archi, epoch):
                 regularization_loss += torch.sum(abs(param))
 
             loss = loss_ftn(trained_y, batch_Y.float())        
-            loss = loss + lamda * regularization_loss 
+            loss = loss + 0.005 * regularization_loss    # 0.005 : L1 Penalty
             # credit assignment
             loss.backward()
             
